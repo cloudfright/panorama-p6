@@ -22,35 +22,58 @@ def main(argv):
             outputfile = arg
 
     with open(outputfile, 'w', newline='') as output_remotemap:
-        map_writer = csv.writer(output_remotemap, delimiter='\t', quotechar='"')
-
+       
         with open(inputfile, newline='') as input_remotemap:
-            map_reader = csv.reader(input_remotemap, delimiter='\t', quotechar='"')
+            map_reader = csv.reader(input_remotemap, delimiter='\t', quotechar='"', quoting=csv.QUOTE_MINIMAL)
             # extract the remotemap header
             row = next(map_reader)
-            print(row)
             
             while ('Scope' not in row):
-                map_writer.writerow(row)
+                #map_writer.writerow(row)
+                write_row(output_remotemap, row)
                 row = next(map_reader)
-                print(row)
 
                 # extact the scope
             #row = next(map_reader)
             while (True):
                 if ('Scope' in row and ('Propellerheads' in row or 'Propellerhead Software' in row)):
-                    map_writer.writerow(row)
+                    write_row(output_remotemap, row)
                     row = next(map_reader)
                     while ('Scope' not in row):
-                        map_writer.writerow(row)
+                        write_row(output_remotemap, row)
                         row = next(map_reader)
                 else:
                     row = next(map_reader)
 
+######################################
+# write_row                          #
+# This function writes a row of data #
+# to the output file with custom     #
+# quoting on column 4                #
+######################################
 
+def write_row(output_remotemap, row):
+    # convert to array
+    cols = []
+    for col in row:
+        cols.append(col)
+    i = 0   
+    # create custom quoting on column 4 as required
+    for col in cols:
+        if (i == 0 and 'Map' in col and len(cols) > 3):
+            cols[3] = '"' + cols[3] + '"'
+        i = i + 1
+    # write the array to the file adding delimeter and newline
+    outs = ''    
+    first = False
+    for col in cols:
+        if first:
+            outs = outs + col + '\t'
+            first = True
+        else: 
+            outs = outs + col + '\t'
+    outs = outs + '\r\n'   
+    output_remotemap.write(outs)
 
 if __name__ == "__main__":
-    main(sys.argv[1:])#
-
-
-# http://pymotw.com/2/csv/
+    main(sys.argv[1:])

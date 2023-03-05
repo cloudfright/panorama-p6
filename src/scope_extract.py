@@ -4,6 +4,15 @@ import sys
 import getopt
 import csv
 
+###########################################
+# This script takes a remotemap as input, #
+# extracts all the Propellerhead scopes   #
+# and writes them to a new remotemap      #                      
+# Arguments                               #
+# -i [input file name]                    #
+# -o [output file name]                   #
+###########################################
+
 def main(argv):
     inputfile = ''
     outputfile = ''
@@ -63,7 +72,7 @@ def write_row(output_remotemap, row):
         if (i == 0 and 'Map' in col and len(cols) > 3):
             cols[3] = '"' + cols[3] + '"'
         i = i + 1
-    # write the array to the file adding delimeter and newline
+    # write the array to the file adding delimiter and newline
     outs = ''    
     first = False
     for col in cols:

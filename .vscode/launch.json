@@ -12,7 +12,7 @@
             "program": "${file}",
             "console": "integratedTerminal",
             "justMyCode": true,
-            "args": ["-i","~/Downloads/Panorama.remotemap"]                
+            "args": ["-i","./csv", "-o", "./combined/test.remotemap"]                
         }
     ]
 }
